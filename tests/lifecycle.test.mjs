@@ -37,3 +37,37 @@ test('recently paused media is not labelled unsupported while Chrome audible cat
   assert.equal(tabStatus(tab, null, { enabled: true }, 1500).status, 'idle');
   assert.equal(tabStatus(tab, null, { enabled: true }, 5000).status, 'unsupported', 'Persistent untracked audio must still be reported');
 });
+
+test('Shadow DOM API invalidation before port disconnect stops observers and restores volume', () => {
+  class Element extends EventTarget {
+    querySelectorAll() { return []; }
+    getAttribute() { return null; }
+  }
+  class Media extends Element {
+    volume = .4; paused = false; ended = false; muted = false; isConnected = true; currentSrc = 'test.wav';
+  }
+  const media = new Media(), document = new Element(), window = new EventTarget();
+  document.querySelectorAll = () => [media];
+  let control, mutate, invalidated = false, observerStopped = false, portClosed = false;
+  const port = { postMessage() {}, disconnect() { portClosed = true; }, onMessage: { addListener(fn) { control = fn; } }, onDisconnect: { addListener() {} } };
+  const chrome = {
+    runtime: { id: 'test', connect: () => port },
+    dom: { openOrClosedShadowRoot() { if (invalidated) throw Error('Extension context invalidated.'); return null; } }
+  };
+  const context = { document, window, chrome, HTMLElement: Element, HTMLMediaElement: Media, HTMLInputElement: class extends Element {},
+    MutationObserver: class { constructor(fn) { mutate = fn; } observe() {} disconnect() { observerStopped = true; } },
+    Node: { ELEMENT_NODE: 1 }, performance, setTimeout: () => 1, clearTimeout() {} };
+  vm.runInNewContext(fs.readFileSync(new URL('../extension/content.js', import.meta.url), 'utf8'), context);
+  control({ type: 'CONTROL', factor: .25, enabled: true });
+  assert.equal(media.volume, .1);
+  invalidated = true;
+  const added = new Element(); added.nodeType = 1;
+  const change = [{ target: document, removedNodes: [], addedNodes: [added] }];
+  assert.doesNotThrow(() => mutate(change), 'Queued DOM work must tolerate invalidation before a disconnect callback');
+  assert.equal(media.volume, .4);
+  assert.equal(observerStopped, true);
+  assert.equal(portClosed, true);
+  assert.doesNotThrow(() => mutate(change), 'Already queued mutations must remain harmless after cleanup');
+  media.dispatchEvent(new Event('play'));
+  assert.equal(media.volume, .4);
+});

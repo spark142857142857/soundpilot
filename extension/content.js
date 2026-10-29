@@ -5,6 +5,13 @@
   let lastInput = -Infinity, lastVolumeInput = -Infinity, inputSerial = 0, claimedInput = 0, signature = '';
   const closeEnough = (a, b) => Math.abs(a - b) < 1e-7;
 
+  function contextReady() {
+    if (stopped) return false;
+    try { if (chrome.runtime?.id) return true; } catch {}
+    shutdown();
+    return false;
+  }
+
   function mediaState() {
     return [...tracked].filter(([element]) => element.isConnected).map(([element, state]) => ({
       playing: !element.paused && !element.ended && !element.muted && (state.base ?? element.volume) > 0 && !!(element.currentSrc || element.src || element.srcObject),
@@ -25,7 +32,7 @@
   }
 
   function apply() {
-    if (stopped) return;
+    if (!contextReady()) return;
     for (const [element, state] of tracked) {
       if (!enabled || factor === 1 || element.paused || element.ended || element.muted) restore(element, state);
       else if (!state.reason) {
@@ -36,7 +43,7 @@
   }
 
   function report(claim = false, force = false) {
-    if (stopped) return;
+    if (!contextReady()) return;
     const media = mediaState(), next = JSON.stringify(media);
     if (port && (force || claim || next !== signature)) {
       signature = next;
@@ -53,7 +60,7 @@
 
   function connect(claim = false) {
     if (port || stopped) return;
-    if (!chrome.runtime?.id) { shutdown(); return; }
+    if (!contextReady()) return;
     try {
       port = chrome.runtime.connect({ name: 'soundpilot-media' });
       port.onMessage.addListener(message => {
@@ -62,17 +69,16 @@
         apply(); report();
       });
       port.onDisconnect.addListener(() => {
-        void chrome.runtime.lastError;
+        try { void chrome.runtime.lastError; } catch {}
         port = null;
-        if (!chrome.runtime?.id) shutdown();
-        else if (mediaState().some(item => item.playing || item.controlled)) reconnect();
+        if (contextReady() && mediaState().some(item => item.playing || item.controlled)) reconnect();
       });
       report(claim, true);
     } catch { shutdown(); }
   }
 
   function onInput(event) {
-    if (!event.isTrusted) return;
+    if (!contextReady() || !event.isTrusted) return;
     lastInput = performance.now(); inputSerial++;
     const labels = event.composedPath().filter(node => node instanceof HTMLElement).map(node =>
       [node.getAttribute('aria-label'), node.getAttribute('title'), node.id, typeof node.className === 'string' ? node.className : ''].join(' ')).join(' ');
@@ -116,13 +122,19 @@
   }
 
   function discover(root) {
-    if (!root.querySelectorAll) return;
+    if (!contextReady() || !root.querySelectorAll) return;
     if (root instanceof HTMLMediaElement) attach(root);
     const elements = root instanceof HTMLElement ? [root, ...root.querySelectorAll('*')] : root.querySelectorAll('*');
     for (const element of elements) {
       if (element instanceof HTMLMediaElement) attach(element);
       if (!(element instanceof HTMLElement)) continue;
-      const shadow = chrome.dom?.openOrClosedShadowRoot(element) || element.shadowRoot;
+      let shadow;
+      try { shadow = chrome.dom?.openOrClosedShadowRoot(element) || element.shadowRoot; }
+      catch (error) {
+        // Reload can invalidate Chrome APIs before the port disconnect callback arrives.
+        if (/Extension context invalidated/i.test(error?.message || '') || !contextReady()) { shutdown(); return; }
+        throw error;
+      }
       if (shadow && !observed.has(shadow)) { observe(shadow); discover(shadow); }
     }
   }
@@ -136,7 +148,7 @@
   }
 
   const observer = new MutationObserver(records => {
-    if (stopped) return;
+    if (!contextReady()) return;
     // A one-for-one player replacement may copy our temporary volume. Preserve its original baseline.
     // Aggregate records per parent because remove/insert may be separate mutations in the same task.
     const replacements = new Map();
@@ -155,6 +167,7 @@
       replacement.base = state.base; replacement.expected = state.expected;
     }
     for (const record of records) for (const node of record.addedNodes) if (node.nodeType === Node.ELEMENT_NODE) discover(node);
+    if (stopped) return;
     clearTimeout(scanTimer);
     scanTimer = setTimeout(() => { prune(); apply(); report(); }, 60);
   });
