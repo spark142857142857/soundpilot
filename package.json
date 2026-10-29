@@ -1,0 +1,17 @@
+{
+  "name": "soundpilot",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "SoundPilot Chrome extension MVP",
+  "engines": { "node": ">=22" },
+  "devDependencies": { "playwright": "1.62.1" },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test tests/engine.test.mjs tests/lifecycle.test.mjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:youtube": "node tests/youtube.cjs",
+    "test:transitions": "node tests/transitions.cjs",
+    "package": "node scripts/package.mjs"
+  }
+}

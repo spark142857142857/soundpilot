@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SoundPilot</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="popup.js" type="module"></script>
+</head>
+<body>
+  <header>
+    <div class="brand"><img src="icons/32.png" width="28" height="28" alt=""><span>SoundPilot</span></div>
+    <label class="toggle"><span>Auto volume</span><input id="enabled" type="checkbox" role="switch" checked><span class="switch" aria-hidden="true"></span></label>
+  </header>
+  <main>
+    <section class="focus" aria-labelledby="focus-label">
+      <div class="eyebrow" id="focus-label"><span class="signal" aria-hidden="true"></span>Listening to</div>
+      <h1 id="focus-title">Connecting…</h1>
+      <p id="focus-domain" class="domain"> </p>
+    </section>
+    <section class="volume" aria-labelledby="volume-label">
+      <div class="volume-heading"><label id="volume-label" for="percent">Background volume</label><output id="value" for="percent">25<span>%</span></output></div>
+      <input id="percent" type="range" min="0" max="100" step="1" value="25" aria-describedby="volume-help">
+      <div class="volume-footer"><span id="volume-help">of original volume</span><button id="reset" type="button">Reset to 25%</button></div>
+    </section>
+    <section class="others" aria-labelledby="others-label">
+      <div class="list-heading"><h2 id="others-label">Other tabs</h2><span id="count">0</span></div>
+      <ul id="tabs"></ul>
+      <p id="empty" class="empty">Play audio in another tab to hear the difference.</p>
+    </section>
+    <p id="notice" role="status" hidden></p>
+  </main>
+  <template id="tab-row"><li><span class="tab-icon" aria-hidden="true">♫</span><div class="tab-copy"><div class="tab-title"></div><div class="tab-status"></div></div></li></template>
+</body>
+</html>

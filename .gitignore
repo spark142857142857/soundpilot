@@ -1,0 +1,16 @@
+node_modules/
+dist/
+artifacts/
+research/
+/PRD.md
+/REVIEW.md
+.env
+.env.*
+*.log
+*.pem
+*.key
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.prdworks/
