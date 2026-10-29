@@ -1,6 +1,6 @@
 # Chrome Web Store fields
 
-Prepared for SoundPilot 0.1.2 on October 29, 2026. Copy only the relevant field value, not this document's headings. These are prepared entries; nothing has been uploaded or submitted to the store.
+Reference fields for SoundPilot 0.1.2, submitted for Chrome Web Store review on October 29, 2026. Approval is pending. For future submissions, copy only the relevant field value, not this document's headings, and update the values to match the build.
 
 ## Store listing
 

@@ -31,6 +31,6 @@ Browser checks used Chrome 156 on Windows with separate temporary profiles. Test
 - Accessible HTML media is the compatibility boundary. Do not advertise universal compatibility, full CHZZK/community-player validation, or full current-version signed-in YouTube Music coverage.
 - Use Auto volume OFF before reloading/removing. Existing media pages should be refreshed after an update. Abrupt process termination still limits restoration guarantees.
 
-## Account/dashboard work still required
+## Submission status
 
-Upload the prepared ZIP and graphic assets, copy the prepared English fields, verify real publisher/contact/distribution details, and resolve any dashboard validation messages before requesting review. Existing historical errors in Chrome are not automatically deleted by a code update. There is no need for a developer-dashboard screenshot unless its fields or warnings differ from the supplied guide.
+Version 0.1.2 was submitted for review on October 29, 2026. Approval is pending. The dashboard displayed an additional-review notice for broad host permissions; the submission proceeded with the prepared permission justification. Keep the submitted ZIP and its SHA-256 file for comparison with any later update. Review feedback will determine any further changes.

@@ -1,6 +1,6 @@
 # SoundPilot store submission kit
 
-Prepared for version **0.1.2**. This folder contains listing material; the uploadable extension ZIP is generated separately. The materials are ready for dashboard entry, not submitted or approved.
+Version **0.1.2** was submitted for Chrome Web Store review on **October 29, 2026**. Approval is pending. This folder retains the listing material; the submitted extension ZIP is kept separately in `dist/`.
 
 ## Files to use
 
@@ -19,7 +19,7 @@ Prepared for version **0.1.2**. This folder contains listing material; the uploa
 
 Upload screenshots in the numbered order above. They contain real installed-extension action-popup captures with explanatory artwork. Demo titles and localhost addresses come from controlled media pages, not a personal browser profile. Popup text and state were not mocked or rewritten. Artwork generation writes intermediate popup captures to the Git-ignored `artifacts/store-captures/` directory; only the final store-size assets are kept here.
 
-## Dashboard order
+## Dashboard reference for future submissions
 
 1. Add a new item and upload `soundpilot-0.1.2.zip`.
 2. Fill out Store listing using the English description, icon, and screenshots. Promotional tiles are optional but provided.
