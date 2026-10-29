@@ -1,74 +1,93 @@
 # SoundPilot
 
-**Keep your newest play in focus.**
+[![Checks](https://github.com/spark142857142857/soundpilot/actions/workflows/check.yml/badge.svg)](https://github.com/spark142857142857/soundpilot/actions/workflows/check.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-SoundPilot is a Chrome extension that lowers audio in other tabs when you start playing something new, then restores it when you're done. Music and video follow the same rules.
+English | [한국어](README.ko.md)
 
-<img src="docs/images/popup.png" alt="SoundPilot popup with a focused playlist and another tab lowered to 25 percent" width="392">
+A Chrome extension that lowers other tabs when you start playing music or video, then restores their volume when you're done. Written in plain JavaScript, with no runtime dependencies.
 
-## How it works
+<p align="center">
+  <img src="docs/images/popup.png" alt="SoundPilot popup with a focused playlist and another tab lowered to 25 percent" width="392">
+</p>
+
+## Highlights
+
+- **Automatic priority.** The media you most recently play takes focus. Music and video follow the same rules.
+- **Adjustable background volume.** Keep other players at 25% of their original volume by default, or choose any value from 0–100%.
+- **Automatic recovery.** Pause, finish, or close the focused source to restore the most recent source still playing. Paused media stays paused.
+- **General site support.** Works with accessible HTML audio and video across HTTP/HTTPS sites, including permitted frames and discovered Shadow DOM players. See [compatibility](#compatibility).
+- **One toolbar popup.** Change settings and see active tabs in an English popup. Automatic control keeps working when you close it.
+- **Local operation.** No account, API key, backend, analytics, or audio recording.
+
+## Installation
+
+Requires **Google Chrome 120+**. The Chrome Web Store listing is not published yet; install from source for now. Node.js is only needed for development.
+
+```sh
+git clone https://github.com/spark142857142857/soundpilot.git
+```
+
+You can also [download the source ZIP](https://github.com/spark142857142857/soundpilot/archive/refs/heads/main.zip) and extract it.
+
+1. Open `chrome://extensions` and enable **Developer mode**.
+2. Click **Load unpacked** and select the repository's **extension** directory, which contains `manifest.json`.
+3. Open SoundPilot from Chrome's extension menu, or pin it to the toolbar.
+
+Existing web tabs connect where Chrome allows it. If a page does not connect, check site access and refresh it. Incognito access requires a separate choice in Chrome.
+
+Before updating, reloading, or removing SoundPilot, turn **Auto volume** off to restore controlled volumes. After updating, reload the extension and your media pages.
+
+## Usage
 
 1. Start music in one tab.
-2. Play a video in another. Your music drops to **25% of its original volume**.
+2. Play a video in another. The music drops to **25% of its original volume**.
 3. Pause or close the video. The music returns to its original volume while continuing to play.
 
-Change **Background volume** from 0–100%, or use **Reset to 25%**. Settings are saved locally. Closing the popup does not stop automatic control. Switching tabs alone does not change priority.
+The same sequence works in reverse: start music while a video is playing, and the video becomes the background source. Switching tabs alone does not change priority.
 
-- General HTTP/HTTPS site support without site registration.
-- Connected HTML audio/video, permitted frames, and discovered Shadow DOM players.
-- Restores the most recently selected source still playing; never resumes paused media.
-- Respects recognized manual volume changes and stops fighting persistent player volume conflicts.
-- English toolbar popup. No floating page panel, account, API key, or backend.
+Click the extension icon to adjust **Background volume** from 0–100%, use **Reset to 25%**, or toggle **Auto volume**. Settings are saved locally. Recognized manual volume changes take precedence for the current overlap; SoundPilot also stops repeatedly overriding a player that rejects its adjustments.
 
-## Install
+## Documentation
 
-Current version: **0.1.1**. The Chrome Web Store listing is not published yet.
-
-1. Clone this repository or download and extract its source ZIP.
-2. Open `chrome://extensions` and enable **Developer mode**.
-3. Click **Load unpacked** and select the **extension** directory containing `manifest.json`.
-4. Open SoundPilot from Chrome's extension menu, or pin it to the toolbar.
-
-Existing web tabs are connected where Chrome allows it. If a page does not connect, check site access and refresh the page. Incognito access requires a separate choice in Chrome.
-
-Before reloading or removing the extension, turn **Auto volume off** to restore controlled volume. After updating, reload the extension and your media pages.
+- [Product scope](docs/PRD.md) — behavior, architecture, and planned improvements.
+- [Validation coverage](docs/TESTING.md) — tested scenarios, commands, and remaining gaps.
+- [Privacy and permissions](docs/PRIVACY.md) — local data handling and permission details.
 
 ## Compatibility
 
-SoundPilot controls accessible media elements, not the operating system's audio mixer. General site support does not guarantee every player is compatible.
+SoundPilot adjusts accessible media elements in web pages. It does not control system audio, and some players cannot be controlled.
 
-- Detached audio, independent Web Audio graphs, restricted Chrome pages, and inaccessible frames may not be controllable.
+- Detached audio, independent Web Audio output, restricted Chrome pages, and inaccessible frames are outside the common control path.
 - Direct play is inferred from recent page input. Ads, previews, automatic tracks, and OS media keys can behave differently.
-- Volume is calculated from the media element's original value; the site's displayed slider can use a different scale.
-- One-for-one player replacement with a copied lowered value preserves the original baseline. Complex or delayed replacement needs more testing.
-- Volume changes are immediate. Fades are not implemented yet.
+- The background ratio uses the media element's original volume. A site's visible slider may use a different scale.
+- Volume changes are immediate; fades are not implemented. Complex or delayed player replacement needs more testing.
 
-See [product scope](docs/PRD.md) and [validation coverage](docs/TESTING.md).
+Public YouTube and local browser scenarios have been tested. Earlier prototypes were also tested with signed-in YouTube Music; this does not establish full coverage of the current version there. CHZZK and arbitrary community players have not received complete site-specific validation. See the [test report](docs/TESTING.md).
 
 ## Privacy and permissions
 
-No analytics, remote service, or audio recording. Media state and tab information are processed locally. Preferences use local extension storage; current tab state uses temporary session storage for worker recovery.
+Media state and tab information are processed locally. Preferences use local extension storage; temporary session storage helps recover current tab state after worker restarts.
 
 | Permission | Purpose |
 | --- | --- |
 | HTTP/HTTPS host access | Find and adjust media on web pages and permitted frames |
-| `tabs` | Tab titles, sound/mute state, and lifecycle for focus and popup status |
+| `tabs` | Read tab titles, sound/mute state, and lifecycle for priority and popup status |
 | `scripting` | Connect web pages already open at installation or activation |
 | `storage` | Save settings and recover state after worker restarts |
 
-Read the [privacy details](docs/PRIVACY.md).
-
 ## Development
 
-Plain JavaScript, HTML, and CSS. No runtime dependencies or build step. Use Node.js 22+.
+The extension uses JavaScript, HTML, and CSS with no build step. Use **Node.js 22+** to run the checks:
 
 ```sh
+cd soundpilot
 npm ci
 npm run check
 npm test
 ```
 
-Browser tests use Playwright and an installed Google Chrome in a separate temporary profile.
+Browser tests require an installed Google Chrome. Playwright runs them in a separate temporary profile:
 
 ```sh
 npm run test:browser
@@ -76,21 +95,14 @@ npm run test:transitions
 npm run test:youtube
 ```
 
-The YouTube suite requires network access. Set `SOUNDPILOT_CHROME` to override the Chrome executable or `SOUNDPILOT_PLAYWRIGHT` to use an alternate Playwright module. Browser tests have been validated on Windows with Chrome 156.
+The YouTube suite requires network access. Set `SOUNDPILOT_CHROME` to override the Chrome executable or `SOUNDPILOT_PLAYWRIGHT` to use an alternate Playwright module. Browser tests have been validated on Windows with Chrome 156. CI runs static checks and unit tests.
 
-On Windows, build the upload ZIP with:
+On **Windows**, create an upload ZIP with `npm run package`. It contains the contents of `extension/`, with `manifest.json` at its root. Generated packages, local research, and test output are Git-ignored. The screenshot above uses controlled test fixtures.
 
-```sh
-npm run package
-```
+## Contributing
 
-The ZIP contains only `extension/` contents, with `manifest.json` at its root. Generated packages, local research, and test output are Git-ignored. The screenshot above uses controlled test fixtures.
+Bug reports and pull requests are welcome. For playback issues, include the site, Chrome version, playback order, and steps to reproduce. Run `npm run check` and `npm test` before submitting a code change, plus the relevant browser suite when changing playback behavior.
 
-## Project layout
+## License
 
-```text
-extension/       Installable Manifest V3 extension
-tests/           Policy, lifecycle, and browser integration tests
-scripts/         Validation and Windows packaging scripts
-docs/            Product scope, privacy, and test coverage
-```
+SoundPilot is licensed under the [MIT License](LICENSE).

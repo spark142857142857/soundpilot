@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "SoundPilot Chrome extension MVP",
+  "license": "MIT",
   "engines": { "node": ">=22" },
   "devDependencies": { "playwright": "1.62.1" },
   "scripts": {
