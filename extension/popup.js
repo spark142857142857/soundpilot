@@ -30,6 +30,13 @@ function render(state) {
       conflict: 'Player keeps changing volume', unsupported: "Can’t control audio", access: 'Site access needed'
     };
     row.querySelector('.tab-status').textContent = labels[tab.status] || 'At original volume';
+    const guidance = {
+      access: 'Allow site access in Chrome, then refresh this page.',
+      conflict: 'Use the player’s volume, or turn Auto volume off and on to retry.',
+      unsupported: 'Use this player’s own volume control.'
+    }[tab.status];
+    row.querySelector('.tab-help').hidden = !guidance;
+    row.querySelector('.tab-help').textContent = guidance || '';
     row.classList.toggle('exception', ['manual', 'conflict', 'unsupported', 'access'].includes(tab.status));
     return row;
   }));

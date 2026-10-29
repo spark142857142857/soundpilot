@@ -42,6 +42,8 @@ li + li { border-top: 1px solid #eef1eb; }
 .tab-status { font-size: 10px; color: #7d8c81; margin-top: 4px; }
 .exception .tab-icon { color: #9a723c; background: #f8f1e5; }
 .exception .tab-status { color: #9a723c; }
+.tab-help { font-size: 11px; line-height: 1.5; color: #77562b; margin-top: 5px; }
+.domain, .volume-footer, .tab-status, .empty, #count, output span { color: #617267; }
 .empty { font-size: 11px; color: #87948a; line-height: 1.6; padding: 6px 0 1px; margin: 10px 0 0; }
 #notice { font-size: 11px; line-height: 1.5; color: #936832; margin-bottom: 0; }
 body.off .signal { background: #99a79c; box-shadow: 0 0 0 3px #eef1eb; }
