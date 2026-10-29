@@ -1,0 +1,28 @@
+Keep your newest play in focus.
+
+SoundPilot automatically lowers audio in other tabs when you start playing music or video, then restores the previous source when you're done. Keep your playlist running while you watch a clip, or start music while a video keeps playing in the background.
+
+HOW IT WORKS
+1. Start music or a video in one tab.
+2. Directly play something in another tab. Other playing sources drop to 25% of their original volume by default.
+3. Pause, finish, or close the focused source. The most recently selected source that's still playing returns to its original volume.
+
+MAKE IT YOURS
+- Set background volume anywhere from 0% to 100% with one slider.
+- Change the level while media is playing, or reset it to 25%.
+- See the focused source and other playing tabs in a compact English popup.
+- Keep automatic control running after closing the popup.
+- Turn Auto volume off to restore controlled volumes.
+
+Music and video follow the same priority rules. Switching tabs alone does not take focus, and paused media stays paused. Recognized manual volume adjustments take precedence during the current overlap.
+
+LOCAL BY DESIGN
+No account, subscription, API key, analytics, or audio recording. Settings and current playback/tab state stay on your device. SoundPilot uses tab titles, site information, media state, and recent playback-related interactions only to manage overlapping audio and display status. It does not send that information to a server.
+
+COMPATIBILITY
+SoundPilot works with accessible HTML audio and video across ordinary websites, rather than a fixed list of sites. Some players, restricted pages, inaccessible frames, and independent Web Audio output cannot be controlled. Ads, automatic next tracks, and OS media keys may behave differently from direct playback. The ratio uses the media element's original volume; a site's displayed slider may use a different scale.
+
+SoundPilot requires Chrome 120 or later. Before updating, reloading, or removing it, turn Auto volume off. After updating, refresh your media pages.
+
+Source and documentation: https://github.com/spark142857142857/soundpilot
+Support: https://github.com/spark142857142857/soundpilot/issues

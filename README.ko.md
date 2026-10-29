@@ -92,12 +92,13 @@ npm test
 ```sh
 npm run test:browser
 npm run test:transitions
+npm run test:reload
 npm run test:youtube
 ```
 
 YouTube 테스트에는 네트워크 연결이 필요합니다. `SOUNDPILOT_CHROME`으로 Chrome 실행 파일을 지정하거나 `SOUNDPILOT_PLAYWRIGHT`로 다른 Playwright 모듈을 사용할 수 있습니다. 브라우저 테스트는 Windows의 Chrome 156에서 검증했습니다. CI에서는 정적 검사와 단위 테스트를 실행합니다.
 
-**Windows**에서는 `npm run package`로 업로드용 ZIP을 생성합니다. ZIP에는 `extension/`의 내용이 들어가며 최상위에 `manifest.json`이 위치합니다. 생성된 패키지, 로컬 연구 자료, 테스트 출력은 Git에서 제외합니다. 위 스크린샷은 통제된 테스트 페이지를 사용했습니다.
+**Windows**에서는 `npm run package`로 업로드용 ZIP을 생성합니다. ZIP에는 `extension/`의 내용과 MIT 라이선스가 들어가며 최상위에 `manifest.json`이 위치합니다. 스토어 자료와 대시보드 입력 안내는 [store/](store/README.md)에 있습니다. 생성된 패키지, 로컬 연구 자료, 테스트 출력은 Git에서 제외합니다. 위 스크린샷은 통제된 테스트 페이지를 사용했습니다.
 
 ## 기여
 

@@ -1,15 +1,18 @@
 # Validation coverage
 
-Version 0.1.1 was checked on October 29, 2026 with Chrome 156.0.8078.48 on Windows.
+Version 0.1.2 was checked on October 29, 2026 with Chrome 156.0.8078.48 on Windows.
 
 | Suite | Cases | Coverage |
 | --- | ---: | --- |
-| Policy and lifecycle | 6 | Recovery, mute eligibility, ratio validation, exception states, controller cleanup, recent-audio grace period |
+| Policy and lifecycle | 7 | Recovery, mute eligibility, ratio validation, exception states, controller cleanup, recent-audio grace period, Shadow DOM invalidation before port disconnect |
 | Local Chrome integration | 21 | Playback orders, actual action popup, closed-popup operation, ratios 0/25/50/100, reset, OFF/ON, three tabs, close recovery, tab switching, manual volume, conflicts, mute, frames, autoplay, navigation, Shadow DOM, multiple windows, worker restart |
 | Player transitions | 3 | Reusing a player, replacement with copied lowered volume, replacement with a distinct original volume |
 | Public YouTube | 4 | Playback orders, recovery, 50% held with popup closed, focused-tab closure |
+| Extension reload | 2 | Concurrent DOM/closed-Shadow-DOM mutations during self-reload; fresh-context playback and recovery after reinstall/page refresh |
 
-All 34 checks passed. Browser tests inspect playback and numeric volume with test-browser audio muted; they do not measure perceived loudness or the output waveform.
+All 37 checks passed. Browser tests inspect playback and numeric volume with test-browser audio muted; they do not measure perceived loudness or the output waveform.
+
+The invalidation regression first failed against 0.1.1's discovery path with the same uncaught Chrome API error reported by the user, then passed after the fix. The real-browser reload test is separate: it checks cleanup during actual context destruction while DOM work continues. Headless Chrome can leave a self-reloaded unpacked extension disabled, so its second phase explicitly uninstalls/reinstalls in the disposable profile and refreshes the media pages. It does not claim that every update automatically reconnects every existing page.
 
 ## Run
 
@@ -20,6 +23,7 @@ npm run check
 npm test
 npm run test:browser
 npm run test:transitions
+npm run test:reload
 npm run test:youtube
 ```
 

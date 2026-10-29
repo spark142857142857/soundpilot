@@ -34,7 +34,14 @@ SoundPilot never resumes paused media. A 400ms recovery delay reduces switching 
 ## Next work
 
 1. Broaden real-site coverage: automatic next tracks, ads, native controls, and complex player replacement.
-2. Add recovery guidance to permission and volume-conflict states.
+2. Validate the new recovery guidance on more real permission and volume-conflict cases.
 3. Evaluate short fades with background throttling and manual-volume interactions.
 
 Out of scope: system-wide audio, microphones, recording, equalizers, amplification, accounts, cloud sync, and AI content analysis.
+
+## Version 0.1.2 submission preparation
+
+- Handle Chrome API invalidation during DOM/Shadow DOM discovery even if the port disconnect callback has not arrived. Stop stale observers/listeners and restore controlled volume.
+- Add a deterministic regression for that race and an isolated Chrome self-reload/reinstall check with concurrent Shadow DOM mutations.
+- Improve popup secondary-text contrast and give recovery guidance for access, unsupported-player, and volume-conflict states.
+- Add a public homepage URL, complete the privacy policy, prepare an English store listing and real-popup screenshots, and include the MIT license in verified upload ZIPs.

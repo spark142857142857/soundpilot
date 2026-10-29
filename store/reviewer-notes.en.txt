@@ -1,0 +1,21 @@
+SoundPilot 0.1.2 — review instructions
+
+Purpose: manage overlapping media volume across Chrome tabs. No account, payment, API key, or credentials are required by the extension.
+
+1. Install the supplied package and allow access on the media websites being tested. Open the toolbar popup. Auto volume should be ON and Background volume should show 25%.
+2. Open two tabs with ordinary HTML audio/video. For a public example, open https://www.youtube.com/watch?v=aqz-KE-bpKQ in two tabs. Complete any website consent prompt, ensure both players are unmuted, and start from a paused state with nonzero player volume.
+3. Directly click Play in tab A, then directly click Play in tab B. A should remain playing at 25% of its original media volume. B remains at its original volume. The popup identifies B under Listening to and A as Lowered to 25%.
+4. Pause B. A should return to its original volume after a short recovery delay without being restarted. B must remain paused.
+5. Reverse the order: pause A, play B, then play A. B should now be lowered. This verifies the same rule works for music and video in either order.
+6. With both playing, change Background volume to 50%. The background source should use half its original volume. Close the popup; automatic control continues.
+7. Reopen the popup and choose Reset to 25%. Then turn Auto volume OFF. Controlled volumes should return to their original values.
+8. Closing the focused tab should also restore the most recent source still playing. Simply switching between tabs must not change priority.
+
+Playback intent uses recent direct page input. Automatic next tracks, ads, previews, or OS media keys may not behave like a direct Play click. Some sites display volume on a nonlinear slider, so a 25% ratio does not necessarily put their visible slider at 25%. The extension does not control detached audio or independent Web Audio graphs and does not auto-resume paused media.
+
+Tab titles, site information, media state, and playback-related input timing are processed locally for this feature. No audio is captured or sent to a server. All extension code is bundled in the ZIP.
+
+Turn Auto volume OFF before reloading/removing the extension. After an extension update, refresh existing media pages. This version fixes uncaught extension-context errors when old pages continue DOM/Shadow DOM work during extension reload.
+
+Source: https://github.com/spark142857142857/soundpilot
+Privacy: https://github.com/spark142857142857/soundpilot/blob/main/docs/PRIVACY.md

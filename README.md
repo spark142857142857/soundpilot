@@ -92,12 +92,13 @@ Browser tests require an installed Google Chrome. Playwright runs them in a sepa
 ```sh
 npm run test:browser
 npm run test:transitions
+npm run test:reload
 npm run test:youtube
 ```
 
 The YouTube suite requires network access. Set `SOUNDPILOT_CHROME` to override the Chrome executable or `SOUNDPILOT_PLAYWRIGHT` to use an alternate Playwright module. Browser tests have been validated on Windows with Chrome 156. CI runs static checks and unit tests.
 
-On **Windows**, create an upload ZIP with `npm run package`. It contains the contents of `extension/`, with `manifest.json` at its root. Generated packages, local research, and test output are Git-ignored. The screenshot above uses controlled test fixtures.
+On **Windows**, create an upload ZIP with `npm run package`. It contains the contents of `extension/` and the MIT license, with `manifest.json` at its root. Store materials and dashboard instructions are in [store/](store/README.md). Generated packages, local research, and test output are Git-ignored. The screenshot above uses controlled test fixtures.
 
 ## Contributing
 
