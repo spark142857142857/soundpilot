@@ -3,13 +3,14 @@ const assert = require('node:assert/strict');
 const { chromium } = require(process.env.SOUNDPILOT_PLAYWRIGHT || 'playwright');
 const { fs, path, root, fixtures, launch, play, pause, volume, popup } = require('../tests/helpers.cjs');
 const out = path.join(root, 'store');
+const captures = path.join(root, 'artifacts', 'store-captures');
 const uri = (file, type = 'image/png') => `data:${type};base64,${fs.readFileSync(file).toString('base64')}`;
 let fixture, browser, renderer;
 const evidence = [];
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function capture(worker, name) {
   const ui = await popup(browser.context, worker);
-  await ui.screenshot({ path: path.join(out, 'captures', `${name}.png`) });
+  await ui.screenshot({ path: path.join(captures, `${name}.png`) });
   await ui.close();
 }
 function wave(color, height, count = 25) {
@@ -35,7 +36,7 @@ async function render(name, width, height, html, transparent = false) {
   console.log(`${name}: ${width}×${height}`);
 }
 (async () => {
-  fs.mkdirSync(path.join(out, 'captures'), { recursive: true });
+  fs.mkdirSync(captures, { recursive: true });
   fs.mkdirSync(path.join(out, 'screenshots'), { recursive: true });
   fixture = await fixtures(); browser = await launch();
   const worker = await browser.install();
@@ -46,7 +47,7 @@ async function render(name, width, height, html, transparent = false) {
   await capture(worker, '01-priority');
   const adjust = await popup(browser.context, worker);
   await adjust.locator('#percent').fill('50'); await volume(music, .2);
-  await adjust.screenshot({ path: path.join(out, 'captures/02-volume.png') }); await adjust.close();
+  await adjust.screenshot({ path: path.join(captures, '02-volume.png') }); await adjust.close();
   evidence.push({ scene: 'adjustable-ratio', music: await volume(music, .2), video: await volume(video, .6) });
   const reset = await popup(browser.context, worker);
   await reset.getByRole('button', { name: 'Reset to 25%' }).click(); await reset.close();
@@ -64,7 +65,7 @@ async function render(name, width, height, html, transparent = false) {
   for (const scene of scenes) {
     const html = documentHtml(`<header><div class="brand"><img src="${icon}">SoundPilot</div><span>CHROME EXTENSION</span></header>
     <main><div class="eyebrow">${scene.eyebrow}</div><h1>${scene.title}</h1><p>${scene.copy}</p><div class="metric">${scene.value}</div><div class="detail">${scene.detail}</div><div class="footer">${scene.footer}</div></main>
-    <div class="stage"><div class="wave">${wave('#c3d9b3', 110)}</div></div><img class="popup" src="${uri(path.join(out, 'captures', `${scene.file}.png`))}" alt="Actual SoundPilot popup">
+    <div class="stage"><div class="wave">${wave('#c3d9b3', 110)}</div></div><img class="popup" src="${uri(path.join(captures, `${scene.file}.png`))}" alt="Actual SoundPilot popup">
     <div class="capture-note">Actual extension popup · Local demo tabs</div><div class="page-number">${scene.number} / 03</div>`, `
     header{position:absolute;left:64px;right:64px;top:42px;display:flex;align-items:center;justify-content:space-between}header>span{font-size:13px;letter-spacing:2px;color:#667665}.brand{display:flex;align-items:center;gap:12px;font-size:25px;font-weight:650;letter-spacing:-.8px}.brand img{width:38px;height:38px}
     main{position:absolute;left:64px;top:162px;z-index:2}.eyebrow{font-size:13px;letter-spacing:2px;color:#527454;font-weight:650}h1{font-size:47px;line-height:1.17;letter-spacing:-2px;font-weight:600;margin:20px 0 22px}main p{font-size:18px;color:#526657;line-height:1.65;margin:0}.metric{font-size:92px;font-weight:500;letter-spacing:-5px;line-height:1.1;margin-top:30px}.metric span{font-size:47px;margin-left:5px}.detail{font-size:15px;color:#526657;margin-top:9px}.footer{margin-top:48px;font-size:17px;color:#31593d}

@@ -17,7 +17,7 @@ Prepared for version **0.1.2**. This folder contains listing material; the uploa
 | Optional small promotional tile | [promo-small-440x280.png](promo-small-440x280.png) — 440×280 |
 | Optional marquee promotional tile | [promo-marquee-1400x560.png](promo-marquee-1400x560.png) — 1400×560 |
 
-Upload screenshots in the numbered order above. They contain real installed-extension action-popup captures with explanatory artwork. Demo titles and localhost addresses come from controlled media pages, not a personal browser profile. Popup text and state were not mocked or rewritten. The raw popup captures are retained in `captures/`; they are source material, not the store-size uploads.
+Upload screenshots in the numbered order above. They contain real installed-extension action-popup captures with explanatory artwork. Demo titles and localhost addresses come from controlled media pages, not a personal browser profile. Popup text and state were not mocked or rewritten. Artwork generation writes intermediate popup captures to the Git-ignored `artifacts/store-captures/` directory; only the final store-size assets are kept here.
 
 ## Dashboard order
 
