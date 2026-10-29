@@ -1,9 +1,9 @@
 {
   "name": "soundpilot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
-  "description": "SoundPilot Chrome extension MVP",
+  "description": "Automatic volume priority and recovery across Chrome tabs",
   "license": "MIT",
   "engines": { "node": ">=22" },
   "devDependencies": { "playwright": "1.62.1" },
@@ -13,6 +13,8 @@
     "test:browser": "node tests/browser.cjs",
     "test:youtube": "node tests/youtube.cjs",
     "test:transitions": "node tests/transitions.cjs",
-    "package": "node scripts/package.mjs"
+    "test:reload": "node tests/reload.cjs",
+    "package": "node scripts/package.mjs",
+    "store:assets": "node scripts/store-assets.cjs"
   }
 }

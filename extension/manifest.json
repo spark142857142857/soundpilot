@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "name": "SoundPilot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Keep your newest play in focus. Automatically lower other tabs and restore their volume when you're done.",
   "minimum_chrome_version": "120",
+  "homepage_url": "https://github.com/spark142857142857/soundpilot",
   "permissions": ["storage", "tabs", "scripting"],
   "host_permissions": ["http://*/*", "https://*/*"],
   "background": { "service_worker": "background.js", "type": "module" },
